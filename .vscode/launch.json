@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug sxhkd-cheatsheet",
+            "program": "${workspaceFolder}/build/sxhkd-cheatsheet",
+            "args": [
+                "5"
+            ],
+            "cwd": "${workspaceFolder}",
+            "preLaunchTask": "build-debug",
+            "console": "externalTerminal",
+        }
+    ]
+}
