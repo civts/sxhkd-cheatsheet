@@ -7,7 +7,7 @@
             "name": "Debug sxhkd-cheatsheet",
             "program": "${workspaceFolder}/build/sxhkd-cheatsheet",
             "args": [
-                "5"
+                "./sxhkdrc"
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build-debug",

@@ -1,39 +1,35 @@
+#include "extractor.cpp"
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/event.hpp"
+#include "ftxui/component/screen_interactive.hpp"
+#include "group.cpp"
+#include "shortcut.cpp"
+#include <cstdlib>
+#include <fstream>
 #include <iostream>
+#include <string>
+#include <vector>
 
-#include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/screen.hpp"
-#include "ftxui/screen/string.hpp"
+using namespace std;
+using namespace ftxui;
 
-int main(void) {
-  using namespace ftxui;
+int main(int argc, const char *argv[]) {
+  if (argc != 2) {
+    cerr << "This program accepts only one positional argument: the path "
+            "to the sxhkdrc file";
+    exit(1);
+  }
+  string path = argv[1];
+  cout << path << endl << endl;
 
-  auto summary = [&] {
-    auto content = vbox({
-        hbox({text(L"- done:   "), text(L"3") | bold}) | color(Color::Green),
-        hbox({text(L"- active: "), text(L"2") | bold}) | color(Color::RedLight),
-        hbox({text(L"- queue:  "), text(L"9") | bold}) | color(Color::Red),
-    });
-    return window(text(L" Summary "), content);
-  };
-
-  auto document = //
-      vbox({
-          hbox({
-              summary(),
-              summary(),
-              summary() | flex,
-          }),
-          summary(),
-          summary(),
-      });
-
-  // Limit the size of the document to 80 char.
-  document = document | size(WIDTH, LESS_THAN, 80);
-
-  auto screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-  Render(screen, document);
-
-  std::cout << screen.ToString() << std::endl;
-
-  return EXIT_SUCCESS;
+  vector<Group> result = extractor(path);
+  for (Group g : result) {
+    cout << ">>>> " << g.name << endl;
+    for (Shortcut s : g.shortcuts) {
+      // cout << "-- " << s.keys << endl;
+      cout << "- " << s.description << endl;
+      // cout << "---- " << s.command << endl;
+    }
+  }
+  return 0;
 }

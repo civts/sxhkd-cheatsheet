@@ -5,7 +5,9 @@
         "**/.hg": true,
         "**/CVS": true,
         "**/.DS_Store": true,
-        "**/Thumbs.db": true
+        "**/Thumbs.db": true,
+        "compile_commands.json": true,
+        ".editorconfig": true
     },
     "cmake.configureOnOpen": true,
     "clangd.onConfigChanged": "restart",
