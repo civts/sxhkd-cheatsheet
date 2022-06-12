@@ -3,7 +3,7 @@
 #include <fstream>
 
 /// Parses the sxhkd file nd returns the result
-vector<Group> extractor(string path) {
+vector<Group> parseShortcutsFile(string path) {
   // Open the file
   vector<Group> result = vector<Group>();
   ifstream sxhkdrcFile;
