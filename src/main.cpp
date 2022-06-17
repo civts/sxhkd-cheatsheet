@@ -1,3 +1,4 @@
+#include "argument_parser.hpp"
 #include "display.cpp"
 #include "extractor.cpp"
 #include "ftxui/component/component.hpp"
@@ -18,13 +19,8 @@ using namespace std;
 using namespace ftxui;
 
 int main(int argc, const char *argv[]) {
-  if (argc != 2) {
-    cerr << "This program accepts only one positional argument: the path "
-            "to the sxhkdrc file";
-    exit(1);
-  }
-  string path = argv[1];
-  vector<Group> groups = parseShortcutsFile(path);
-  displayShortcuts(groups);
+  ParsedArgs args = parseArgs(argc, argv);
+  vector<Group> groups = parseShortcutsFile(args.filePath);
+  displayShortcuts(groups, args);
   return EXIT_SUCCESS;
 }

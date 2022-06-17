@@ -1,3 +1,4 @@
+#include "argument_parser.cpp"
 #include "ftxui/dom/elements.hpp"
 #include "ftxui/screen/screen.hpp"
 #include "group.cpp"
@@ -7,7 +8,7 @@
 using namespace ftxui;
 using namespace std;
 
-void displayShortcuts(vector<Group> groups) {
+void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
   vector<Element> left = {};
   vector<Element> right = {};
   int totalshortcuts = 0;
@@ -29,7 +30,7 @@ void displayShortcuts(vector<Group> groups) {
       children.push_back(text(""));
     }
     children.push_back(hbox({
-        text(g.name) | bgcolor(Color::Aquamarine1),
+        text(" " + g.name + " ") | bgcolor(args.colors[i % args.colors.size()]),
         filler(),
     }));
     for (Shortcut s : g.shortcuts) {
@@ -48,10 +49,11 @@ void displayShortcuts(vector<Group> groups) {
     shortcutsUntilNow += g.shortcuts.size();
   }
   Element document = hbox({
-      vbox(left),
-      text(" "),
-      vbox(right),
-  });
+                         vbox(left),
+                         text(" "),
+                         vbox(right),
+                     }) |
+                     color(args.textColor);
 
   Screen screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
   Render(screen, document);

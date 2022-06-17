@@ -28,7 +28,7 @@ target_include_directories(sxhkd-cheatsheet PRIVATE src)
 target_link_libraries(sxhkd-cheatsheet
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
-  PRIVATE ftxui::component # Not needed for this example.
+  PRIVATE ftxui::component
 )
 
 install(TARGETS sxhkd-cheatsheet RUNTIME DESTINATION "bin")
