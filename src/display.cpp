@@ -1,6 +1,7 @@
 #include "argument_parser.cpp"
+#include "ftxui/component/component.hpp"
+#include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
-#include "ftxui/screen/screen.hpp"
 #include "group.cpp"
 #include "shortcut.cpp"
 #include <iostream>
@@ -8,7 +9,7 @@
 using namespace ftxui;
 using namespace std;
 
-void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
+Element obtainElement(const vector<Group> groups, const ParsedArgs args) {
   vector<Element> left = {};
   vector<Element> right = {};
   int totalshortcuts = 0;
@@ -54,9 +55,19 @@ void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
                          vbox(right),
                      }) |
                      color(args.textColor);
+  return document;
+}
 
-  Screen screen = Screen::Create(Dimension::Full(), Dimension::Fit(document));
-  Render(screen, document);
-
-  std::cout << screen.ToString() << std::endl;
+void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
+  Element document = obtainElement(groups, args);
+  ScreenInteractive screen = ScreenInteractive::TerminalOutput();
+  Component renderer = Renderer([&] { return document; });
+  Component component = CatchEvent(renderer, [&](Event event) {
+    if (event == Event::Character('q') || event == Event::Escape) {
+      screen.ExitLoopClosure()();
+      exit(0);
+    }
+    return false;
+  });
+  screen.Loop(component);
 }
