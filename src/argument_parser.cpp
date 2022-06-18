@@ -27,6 +27,43 @@ optional<Option> match(const string arg, const vector<Option> options) {
   return optional<Option>();
 }
 
+optional<Color> parsePalette16Color(string code) {
+  if (code == "Black") {
+    return Color::Black;
+  } else if (code == "Red") {
+    return Color::Red;
+  } else if (code == "Green") {
+    return Color::Green;
+  } else if (code == "Yellow") {
+    return Color::Yellow;
+  } else if (code == "Blue") {
+    return Color::Blue;
+  } else if (code == "Magenta") {
+    return Color::Magenta;
+  } else if (code == "Cyan") {
+    return Color::Cyan;
+  } else if (code == "GrayLight") {
+    return Color::GrayLight;
+  } else if (code == "GrayDark") {
+    return Color::GrayDark;
+  } else if (code == "RedLight") {
+    return Color::RedLight;
+  } else if (code == "GreenLight") {
+    return Color::GreenLight;
+  } else if (code == "YellowLight") {
+    return Color::YellowLight;
+  } else if (code == "BlueLight") {
+    return Color::BlueLight;
+  } else if (code == "MagentaLight") {
+    return Color::MagentaLight;
+  } else if (code == "CyanLight") {
+    return Color::CyanLight;
+  } else if (code == "White") {
+    return Color::White;
+  }
+  return optional<Color>();
+}
+
 ParsedArgs parseArgs(const int argc, const char *argv[]) {
   if (argc < 2) {
     cerr << "Missing configuration file path. See --help for details." << endl;
@@ -41,25 +78,27 @@ ParsedArgs parseArgs(const int argc, const char *argv[]) {
           "                             "
           "background of the shortcut groups' names. If you \n"
           "                             "
-          "pass this option multiple times, those colors will\n"
+          "pass this argument multiple times, the colors will\n"
           "                             "
           "be used sequentially (and repeated if needed) in \n"
           "                             "
           "the same order in which you passed them.\n\n"
           "                             "
+          "The colors can be either in the hex format #RRGGBB\n"
+          "                             "
+          "(the initial # is optional) or one of the\n"
+          "                             "
+          "following: ['Black', 'Red', 'Green', 'Yellow',\n"
+          "                             "
+          "'Blue', 'Magenta', 'Cyan', 'GrayLight', 'GrayDark',\n"
+          "                             "
+          "'RedLight', 'GreenLight', 'YellowLight',\n"
+          "                             "
+          "'BlueLight', 'MagentaLight', 'CyanLight', White'].\n\n"
+          "                             "
           "If no '-color' option is passed, the output will \n"
           "                             "
-          "use as default color #16A085. The colors must be in\n"
-          "                             "
-          "hex format (i.e., #RRGGBB). The initial # is \n"
-          "                             "
-          "optional. Note that, depending on your terminal\n"
-          "                             "
-          "emulator, the actual color that gets displayed may\n"
-          "                             "
-          "differ (double check if yours supports 16, 256 or \n"
-          "                             "
-          "TrueColor).",
+          "use as default color #16A085.",
       },
       {
           'h',
@@ -93,30 +132,37 @@ ParsedArgs parseArgs(const int argc, const char *argv[]) {
       switch (matched.shortForm) {
       case 't':
       case 'c': {
-        if (value[0] == '#') {
-          value = value.substr(1);
-        }
-        if (value.length() != 6) {
-          cerr << "'#" << value
-               << "' does not appear to be a valid color in the format #RRGGBB"
-               << endl;
-          exit(1);
-        }
         try {
-          string hexR = value.substr(0, 2);
-          string hexG = value.substr(2, 2);
-          string hexB = value.substr(4, 2);
-          uint8_t r = stoi(hexR, nullptr, 16);
-          uint8_t g = stoi(hexG, nullptr, 16);
-          uint8_t b = stoi(hexB, nullptr, 16);
-          Color color = Color::RGB(r, g, b);
+          Color color;
+          optional<Color> palette16Color = parsePalette16Color(value);
+          if (palette16Color.has_value()) {
+            color = palette16Color.value();
+          } else {
+            if (value[0] == '#') {
+              value = value.substr(1);
+            }
+            if (value.length() != 6) {
+              cerr << "'#" << value
+                   << "' does not appear to be a valid color in the format "
+                      "#RRGGBB"
+                   << endl;
+              exit(1);
+            }
+            string hexR = value.substr(0, 2);
+            string hexG = value.substr(2, 2);
+            string hexB = value.substr(4, 2);
+            uint8_t r = stoi(hexR, nullptr, 16);
+            uint8_t g = stoi(hexG, nullptr, 16);
+            uint8_t b = stoi(hexB, nullptr, 16);
+            color = Color::RGB(r, g, b);
+          }
           if (matched.shortForm == 'c') {
             colors.push_back(color);
           } else {
             textColor = color;
           }
         } catch (invalid_argument _) {
-          cerr << "'#" << value
+          cerr << "'" << value
                << "' does not appear to be a valid color in the format #RRGGBB"
                << endl;
         }
