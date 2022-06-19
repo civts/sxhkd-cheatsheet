@@ -71,8 +71,8 @@ void handleResize(int code) {
 
 void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
   Element document = obtainElement(groups, args);
-  ScreenInteractive screen = ScreenInteractive::TerminalOutput();
-  Component renderer = Renderer([&] { return document; });
+  ScreenInteractive screen = ScreenInteractive::Fullscreen();
+  Component renderer = Renderer([&] { return document | center; });
   Component component = CatchEvent(renderer, [&](Event event) {
     screen.Clear();
     if (event == Event::Character('q') || event == Event::Escape) {
