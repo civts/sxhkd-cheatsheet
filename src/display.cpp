@@ -1,9 +1,11 @@
 #include "argument_parser.cpp"
 #include "ftxui/component/component.hpp"
+#include "ftxui/component/event.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
 #include "group.cpp"
 #include "shortcut.cpp"
+#include <csignal>
 #include <iostream>
 
 using namespace ftxui;
@@ -58,16 +60,33 @@ Element obtainElement(const vector<Group> groups, const ParsedArgs args) {
   return document;
 }
 
+Component componentPtr;
+void handleResize(int code) {
+  if (code != SIGWINCH) {
+    return;
+  }
+  // Trigger an event on the ScreenInteractive so that it resizes
+  componentPtr->OnEvent(Event::Custom);
+}
+
 void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
   Element document = obtainElement(groups, args);
   ScreenInteractive screen = ScreenInteractive::TerminalOutput();
   Component renderer = Renderer([&] { return document; });
   Component component = CatchEvent(renderer, [&](Event event) {
+    screen.Clear();
     if (event == Event::Character('q') || event == Event::Escape) {
       screen.ExitLoopClosure()();
-      exit(0);
     }
     return false;
   });
+  componentPtr = component;
+
+  struct sigaction sa;
+  sa.sa_handler = handleResize;
+  sa.sa_flags = SA_RESTART;
+  sigemptyset(&sa.sa_mask);
+  sigaction(SIGWINCH, &sa, nullptr);
+
   screen.Loop(component);
 }
