@@ -39,8 +39,8 @@ Element obtainElement(const vector<Group> groups, const ParsedArgs args) {
     }));
     for (Shortcut s : g.shortcuts) {
       Element shortcutElem = hbox({
-          text(s.keys) | bold,
-          paragraph(" " + s.description),
+          text(s.keys + " ") | bold,
+          paragraph(s.description),
       });
       children.push_back(shortcutElem);
     }
