@@ -75,8 +75,11 @@ void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
   Component renderer = Renderer([&] { return document | center; });
   Component component = CatchEvent(renderer, [&](Event event) {
     screen.Clear();
-    if (event == Event::Character('q') || event == Event::Escape) {
+    bool didUserPressQ = event == Event::Character('q');
+    bool didUserPressEsc = event == Event::Escape;
+    if (didUserPressQ || didUserPressEsc) {
       screen.ExitLoopClosure()();
+      return true;
     }
     return false;
   });
