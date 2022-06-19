@@ -3,6 +3,7 @@
 #include "ftxui/component/event.hpp"
 #include "ftxui/component/screen_interactive.hpp"
 #include "ftxui/dom/elements.hpp"
+#include "ftxui/dom/node.hpp"
 #include "group.cpp"
 #include "shortcut.cpp"
 #include <csignal>
@@ -69,8 +70,7 @@ void handleResize(int code) {
   componentPtr->OnEvent(Event::Custom);
 }
 
-void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
-  Element document = obtainElement(groups, args);
+void showOnScreen(Element document) {
   ScreenInteractive screen = ScreenInteractive::Fullscreen();
   Component renderer = Renderer([&] { return document | center; });
   Component component = CatchEvent(renderer, [&](Event event) {
@@ -92,4 +92,9 @@ void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
   sigaction(SIGWINCH, &sa, nullptr);
 
   screen.Loop(component);
+}
+
+void displayShortcuts(const vector<Group> groups, const ParsedArgs args) {
+  Element document = obtainElement(groups, args);
+  showOnScreen(document);
 }
