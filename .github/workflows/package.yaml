@@ -12,8 +12,6 @@ jobs:
         runs-on: ubuntu-22.04
         steps:
             - uses: actions/checkout@v3
-            # - name: Create folder for debian
-            #   run: mkdir DEBIAN
             - uses: jwlawson/actions-setup-cmake@v1.12
               name: Setup cmake
             - name: Run CMake
@@ -22,20 +20,23 @@ jobs:
                   cd build
                   cmake ..
                   make
-            - name: Let's see what happened
-              run: ls
-            - name: Let's see what happened in build
-              run: ls ./build
-            # - uses: jiro4989/build-deb-action@v2
-            #   with:
-            #       package: sxhkd-cheatsheet
-            #       package_root: .debpkg
-            #       maintainer: Giacomo Zanolli
-            #       version: ${{ github.ref }} # refs/tags/v*.*.*
-            #       arch: "x86"
-            #       desc: |
-            #           Displays your sxhkd configuration in a simple and colorful
-            #           Text-based User Interface.
+            - name: Create folder structure
+              run: |
+                  mkdir -p .debpkg/usr/bin
+                  cp build/sxhkd-cheatsheet .debpkg/usr/bin/sxhkd-cheatsheet
+              #   echo -e "a=1" > .debpkg/usr/lib/sxhkd-cheatsheet/sxhkd-cheatsheet.conf
+            - uses: jiro4989/build-deb-action@v2
+              with:
+                  package: sxhkd-cheatsheet
+                  package_root: .debpkg
+                  maintainer: Giacomo Zanolli
+                  version: ${{ github.ref }} # refs/tags/v*.*.*
+                  arch: "x86"
+                  desc: |
+                      Displays your sxhkd configuration in a simple and colorful
+                      Text-based User Interface.
+            - name: Check damages
+              run: ls -l
     # rpm:
     #     runs-on: ubuntu-22.04
     #     steps:
