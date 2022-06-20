@@ -30,7 +30,7 @@ jobs:
               run: echo "::set-output name=version::$(less CMakeLists.txt | grep -E "\s+VERSION\s" --color=never | sed 's/\s*VERSION\s*//')"
             - name: Generate build number
               id: buildnumber
-              uses: einaregilsson/build-number@v2
+              uses: einaregilsson/build-number@v3
               with:
                   token: ${{secrets.github_token}}
             - uses: jiro4989/build-deb-action@v2
