@@ -16,15 +16,8 @@ jobs:
             #   run: mkdir DEBIAN
             - uses: jwlawson/actions-setup-cmake@v1.12
               name: Setup cmake
-            - name: Restore artifacts, or setup vcpkg (do not install any package)
-              uses: lukka/run-vcpkg@v10
-              with:
-                  vcpkgGitCommitId: "${{ matrix.vcpkgCommitId }}"
-            - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
+            - name: Run CMake
               uses: lukka/run-cmake@v10
-              with:
-                  configurePreset: "ninja-multi-vcpkg"
-                  buildPreset: "ninja-multi-vcpkg"
             - name: Let's see what happened
               run: ls
             - name: Let's see what happened in build
