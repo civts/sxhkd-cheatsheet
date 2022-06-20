@@ -36,7 +36,7 @@ jobs:
                       Displays your sxhkd configuration in a simple and colorful
                       Text-based User Interface.
             - name: Check damages
-              run: ls -l
+              run: ls -la
     # rpm:
     #     runs-on: ubuntu-22.04
     #     steps:
