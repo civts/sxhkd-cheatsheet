@@ -1,0 +1,55 @@
+name: package
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    deb:
+        runs-on: ubuntu-22.04
+        steps:
+            - uses: actions/checkout@v3
+            # - name: Create folder for debian
+            #   run: mkdir DEBIAN
+            - uses: jwlawson/actions-setup-cmake@v1.12
+              name: Setup cmake
+            - name: Restore artifacts, or setup vcpkg (do not install any package)
+              uses: lukka/run-vcpkg@v10
+            - name: Run CMake consuming CMakePresets.json and vcpkg.json by mean of vcpkg.
+              uses: lukka/run-cmake@v10
+              with:
+                  configurePreset: "ninja-multi-vcpkg"
+                  buildPreset: "ninja-multi-vcpkg"
+            - name: Let's see what happened
+              run: ls
+            - name: Let's see what happened in build
+              run: ls ./build
+            # - uses: jiro4989/build-deb-action@v2
+            #   with:
+            #       package: sxhkd-cheatsheet
+            #       package_root: .debpkg
+            #       maintainer: Giacomo Zanolli
+            #       version: ${{ github.ref }} # refs/tags/v*.*.*
+            #       arch: "x86"
+            #       desc: |
+            #           Displays your sxhkd configuration in a simple and colorful
+            #           Text-based User Interface.
+    # rpm:
+    #     runs-on: ubuntu-22.04
+    #     steps:
+    #         - uses: actions/checkout@v3
+    # flatpak:
+    #     runs-on: ubuntu-22.04
+    #     steps:
+    #         - uses: actions/checkout@v3
+    # appimage:
+    #     runs-on: ubuntu-22.04
+    #     steps:
+    #         - uses: actions/checkout@v3
+    # snap:
+    #     runs-on: ubuntu-22.04
+    #     steps:
+    #         - uses: actions/checkout@v3

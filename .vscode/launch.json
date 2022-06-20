@@ -8,7 +8,7 @@
             "program": "${workspaceFolder}/build/sxhkd-cheatsheet",
             "args": [
                 "-c",
-                "Green",
+                "#08415c",
                 "-c",
                 "Yellow",
                 "-c",
@@ -19,8 +19,7 @@
                 "Cyan",
                 "-c",
                 "Red",
-                //"--help",
-                "./sxhkdrc"
+                "./examples/sample_sxhkdrc",
             ],
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "build-debug",
