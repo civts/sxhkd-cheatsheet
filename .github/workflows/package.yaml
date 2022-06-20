@@ -17,7 +17,11 @@ jobs:
             - uses: jwlawson/actions-setup-cmake@v1.12
               name: Setup cmake
             - name: Run CMake
-              uses: lukka/run-cmake@v10
+              run: |
+                  mkdir build
+                  cd build
+                  cmake ..
+                  make
             - name: Let's see what happened
               run: ls
             - name: Let's see what happened in build
