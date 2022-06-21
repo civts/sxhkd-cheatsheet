@@ -44,8 +44,9 @@ jobs:
             - name: Archive deb package
               uses: actions/upload-artifact@v3
               with:
+                  name: deb
                   path: |
-                      sxhkd-cheatsheet_${{ steps.getversion.outputs.version }}_x86_64.deb
+                      sxhkd-cheatsheet_*.deb
     # rpm:
     #     runs-on: ubuntu-22.04
     #     steps:
