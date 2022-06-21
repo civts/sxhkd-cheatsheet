@@ -24,7 +24,7 @@ jobs:
               run: |
                   mkdir -p .debpkg/usr/bin
                   cp build/sxhkd-cheatsheet .debpkg/usr/bin/sxhkd-cheatsheet
-              #   echo -e "a=1" > .debpkg/usr/lib/sxhkd-cheatsheet/sxhkd-cheatsheet.conf
+                  echo -e "a=1" > .debpkg/usr/lib/sxhkd-cheatsheet/sxhkd-cheatsheet.conf
             - name: Read version code
               id: getversion
               run: echo "::set-output name=version::$(less CMakeLists.txt | grep -E "\s+VERSION\s" --color=never | sed 's/\s*VERSION\s*//')"
@@ -38,9 +38,9 @@ jobs:
                   package: sxhkd-cheatsheet
                   package_root: .debpkg
                   maintainer: Giacomo Zanolli
-                  version: v${{ steps.getversion.outputs.version }}.${{ steps.buildnumber.outputs.build_number }}
+                  version: v${{ steps.getversion.outputs.version }} #+${{ steps.buildnumber.outputs.build_number }}
                   arch: "x86"
-                  desc: |
+                  desc: >
                       Displays your sxhkd configuration in a simple and colorful
                       Text-based User Interface.
             - name: Check damages
