@@ -29,6 +29,7 @@ target_link_libraries(sxhkd-cheatsheet
   PRIVATE ftxui::screen
   PRIVATE ftxui::dom
   PRIVATE ftxui::component
+  -static
 )
 
 install(TARGETS sxhkd-cheatsheet RUNTIME DESTINATION "bin")
