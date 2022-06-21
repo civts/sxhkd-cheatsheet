@@ -38,7 +38,7 @@ jobs:
                   package_root: .debpkg
                   maintainer: Giacomo Zanolli
                   version: v${{ steps.getversion.outputs.version }} #+${{ steps.buildnumber.outputs.build_number }}
-                  arch: "x86"
+                  arch: "x86_64"
                   desc: >
                       Displays your sxhkd configuration in a simple and colorful
                       Text-based User Interface.
@@ -46,7 +46,7 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                   path: |
-                      sxhkd-cheatsheet_${{ steps.getversion.outputs.version }}_x86.deb
+                      sxhkd-cheatsheet_${{ steps.getversion.outputs.version }}_x86_64.deb
     # rpm:
     #     runs-on: ubuntu-22.04
     #     steps:
