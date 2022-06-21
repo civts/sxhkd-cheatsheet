@@ -38,7 +38,6 @@ jobs:
                   package_root: .debpkg
                   maintainer: Giacomo Zanolli
                   version: v${{ steps.getversion.outputs.version }} #+${{ steps.buildnumber.outputs.build_number }}
-                  arch: "x86_64"
                   desc: >
                       Displays your sxhkd configuration in a simple and colorful
                       Text-based User Interface.
